@@ -2,7 +2,6 @@ package IpLocate
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
