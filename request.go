@@ -16,7 +16,7 @@ type IpLocate struct {
 	Region        string  `json:"region"`
 	District      string  `json:"district"`
 	RegionName    string  `json:"regionName"`
-	City          string  `json:"Montreal"`
+	City          string  `json:"city"`
 	ZipCode       string  `json:"zip"`
 	Lat           float64 `json:"lat"`
 	Lon           float64 `json:"lon"`
