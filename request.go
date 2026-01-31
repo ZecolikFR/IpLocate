@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type Test struct {
+type IpLocate struct {
 	Query         string  `json:"query"`
 	Status        string  `json:"status"`
 	Country       string  `json:"country"`
@@ -32,7 +32,7 @@ type Test struct {
 	Hosting       bool    `json:"hosting"`
 }
 
-var data Test
+var data IpLocate
 
 func Request(ip string) {
 	url := "http://ip-api.com/json/" + ip
@@ -50,7 +50,7 @@ func Request(ip string) {
 	}
 
 	json.Unmarshal(body, &data)
-	fmt.Println(data.Mobile)
+	
 }
 func GetQuery() string {
 	return data.Query
