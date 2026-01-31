@@ -20,3 +20,4 @@ import(
 func main(){
 Locate.Request("8.8.8.8")
 fmt.Println(Locate.GetCity())
+}
