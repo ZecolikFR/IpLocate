@@ -1,8 +1,9 @@
-package IpLocate
+package iplocate
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -10,18 +11,17 @@ type IpLocate struct {
 	Query         string  `json:"query"`
 	Status        string  `json:"status"`
 	Country       string  `json:"country"`
-	CountryCode   string  `json:"countrycode"`
+	CountryCode   string  `json:"countryCode"`
 	Continent     string  `json:"continent"`
-	ContinentCode string  `json:"continent_code"`
+	ContinentCode string  `json:"continentCode"`
 	Region        string  `json:"region"`
-	District      string  `json:"district"`
 	RegionName    string  `json:"regionName"`
 	City          string  `json:"city"`
-	ZipCode       string  `json:"zip"`
+	Zip           string  `json:"zip"`
 	Lat           float64 `json:"lat"`
 	Lon           float64 `json:"lon"`
-	TimeZone      string  `json:"timezone"`
-	OffSet        int     `json:"offset"`
+	Timezone      string  `json:"timezone"`
+	Offset        int     `json:"offset"`
 	Isp           string  `json:"isp"`
 	Org           string  `json:"org"`
 	As            string  `json:"as"`
@@ -31,83 +31,28 @@ type IpLocate struct {
 	Hosting       bool    `json:"hosting"`
 }
 
-var data IpLocate
+func Request(ip string) (*IpLocate, error) {
+	url := fmt.Sprintf("http://ip-api.com/json/%s", ip)
 
-func Request(ip string) {
-	url := "http://ip-api.com/json/" + ip
-
-	res, err := http.Get(url)
-
+	resp, err := http.Get(url)
 	if err != nil {
-		panic(err.Error())
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
-
-	if err != nil {
-		panic(err.Error())
+	var result IpLocate
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, err
 	}
 
-	json.Unmarshal(body, &data)
-	
-}
-func GetQuery() string {
-	return data.Query
-}
-func GetContinent() string {
-	return data.Continent
-}
-func GetContinentCode() string {
-	return data.ContinentCode
-}
-func GetCountry() string {
-	return data.Country
-}
-func GetCountryCode() string {
-	return data.CountryCode
-}
-func GetRegion() string {
-	return data.Region
-}
-func GetRegionName() string {
-	return data.RegionName
-}
-func GetDistrict() string {
-	return data.District
-}
-func GetCity() string {
-	return data.City
-}
-func GetZipCode() string {
-	return data.ZipCode
-}
-func GetLat() float64 {
-	return data.Lat
-}
-func GetLon() float64 {
-	return data.Lon
-}
-func GetTimeZone() string {
-	return data.TimeZone
-}
-func GetOffset() int {
-	return data.OffSet
-}
-func GetHosting() bool {
-	return data.Hosting
-}
-func GetProxy() bool {
-	return data.Proxy
-}
-func GetMobile() bool {
-	return data.Mobile
-}
-func GetIsp() string {
-	return data.Isp
-}
-func GetOrg() string {
-	return data.Org
-}
-func GetAs() string {
-	return data.As
+	if result.Status != "success" {
+		return nil, fmt.Errorf("ip-api error for %s", ip)
+	}
+
+	return &result, nil
 }
