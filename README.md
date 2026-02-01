@@ -10,14 +10,10 @@ go get github.com/ZecolikFR/IpLocate
 # Code exemple
 
 ```golang
-package main
+info, err := iplocate.Request("8.8.8.8")
+if err != nil {
+	log.Fatal(err)
+}
 
-import(
-"fmt"
-"github.com/ZecolikFR/IpLocate"
-)
-
-func main(){
-Locate.Request("8.8.8.8")
-fmt.Println(Locate.GetCity())
+fmt.Println(info.Country, info.City, info.Isp)´´´
 }
