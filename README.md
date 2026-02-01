@@ -15,5 +15,5 @@ if err != nil {
 	log.Fatal(err)
 }
 
-fmt.Println(info.Country, info.City, info.Isp)´´´
+fmt.Println(info.Country, info.City, info.Isp)
 }
